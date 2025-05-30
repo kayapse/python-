@@ -1,0 +1,91 @@
+# Функція для обробки колекцій даних
+def process_data(data, operation):
+    """
+    Обробляє елементи колекції `data` за допомогою функції `operation`.
+
+    :param data: Колекція даних (список, кортеж або словник).
+    :param operation: Функція, яку потрібно застосувати до кожного елемента колекції.
+    :return: Нова колекція того ж типу з результатами застосування `operation`.
+    """
+    try:
+        if isinstance(data, (list, tuple)):
+            return type(data)(operation(item) for item in data)  # Обробка списків і кортежів
+        elif isinstance(data, dict):
+            return {key: operation(value) for key, value in data.items()}  # Обробка словників
+        else:
+            raise ValueError("Непідтримуваний тип колекції.")
+    except Exception as e:
+        return f"Помилка: {e}"
+
+# Функція для фільтрації даних
+def filter_data(data, predicate):
+    """
+    Фільтрує елементи колекції `data` за допомогою функції `predicate`.
+
+    :param data: Колекція даних для фільтрації (список, кортеж або словник).
+    :param predicate: Функція-предикат, яка повертає булеве значення.
+    :return: Нова колекція з елементами, що задовольняють умови предиката.
+    """
+    try:
+        if isinstance(data, (list, tuple)):
+            return type(data)(item for item in data if predicate(item))  # Фільтрація списків і кортежів
+        elif isinstance(data, dict):
+            return {key: value for key, value in data.items() if predicate(value)}  # Фільтрація словників
+        else:
+            raise ValueError("Непідтримуваний тип колекції.")
+    except Exception as e:
+        return f"Помилка: {e}"
+
+# Функція для об'єднання значень з динамічною кількістю аргументів
+def combine_values(*args, separator='', initial_value=None):
+    """
+    Об'єднує значення, намагаючись визначити тип першого аргументу.
+
+    :param args: Числові або рядкові значення для об'єднання.
+    :param separator: Роздільник для рядкових значень.
+    :param initial_value: Початкове значення для чисел.
+    :return: Об'єднані значення.
+    """
+    try:
+        if not args:
+            raise ValueError("Не передано жодних значень для об'єднання.")
+
+        if isinstance(args[0], str):  # Якщо перше значення - рядок
+            return separator.join(map(str, args))  # Конкатенація рядків з роздільником
+        elif isinstance(args[0], (int, float)):  # Якщо перше значення - число
+            total = initial_value if initial_value is not None else 0
+            for value in args:
+                if isinstance(value, (int, float)):
+                    total += value  # Додавання чисел
+                else:
+                    raise ValueError("Всі значення мають бути числовими.")
+            return total
+        else:
+            raise TypeError("Не підтримуваний тип даних.")
+    except Exception as e:
+        return f"Помилка: {e}"
+
+# Тестовий код для демонстрації роботи функцій
+print("Тест 1: process_data")
+data_list = [1, 2, 3, 4]
+operation = lambda x: x * 2
+print(process_data(data_list, operation))  # [2, 4, 6, 8]
+
+data_tuple = (1, 2, 3, 4)
+print(process_data(data_tuple, operation))  # (2, 4, 6, 8)
+
+data_dict = {'a': 1, 'b': 2, 'c': 3}
+print(process_data(data_dict, operation))  # {'a': 2, 'b': 4, 'c': 6}
+
+print("\nТест 2: filter_data")
+predicate = lambda x: x > 2
+print(filter_data(data_list, predicate))  # [3, 4]
+
+print("\nТест 3: combine_values")
+print(combine_values(1, 2, 3, 4))  # 10
+print(combine_values("a", "b", "c", separator="-"))  # "a-b-c"
+print(combine_values(1, 2, 3, 4, initial_value=5))  # 15
+
+print("\nТест на помилки")
+print(process_data([1, 2, 3], 'not_a_function'))  # Помилка: 'str' object is not callable
+print(combine_values(1, "two", 3))  # Помилка: Всі значення мають бути числовими
