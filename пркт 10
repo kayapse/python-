@@ -1,0 +1,78 @@
+def factorial_recursive(n):
+    """
+    Обчислює факторіал числа n рекурсивно.
+
+    :param n: Ціле невід'ємне число
+    :return: Факторіал числа n
+    :raises ValueError: Якщо n є від'ємним числом
+    """
+    if n < 0:
+        raise ValueError("Факторіал не визначено для від'ємних чисел.")
+    if n == 0:
+        return 1
+    return n * factorial_recursive(n - 1)
+
+
+def fibonacci_recursive(n):
+    """
+    Обчислює n-те число Фібоначчі рекурсивно.
+
+    :param n: Ціле невід'ємне число
+    :return: n-те число Фібоначчі
+    :raises ValueError: Якщо n є від'ємним числом
+    """
+    if n < 0:
+        raise ValueError("Числа Фібоначчі не визначено для від'ємних індексів.")
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2)
+    # Примітка: рекурсивний підхід має багато повторних обчислень і є менш ефективним для великих n.
+
+
+def sum_list_recursive(numbers):
+    """
+    Рекурсивно обчислює суму елементів списку.
+
+    :param numbers: Список чисел
+    :return: Сума елементів списку
+    """
+    if not numbers:
+        return 0
+    return numbers[0] + sum_list_recursive(numbers[1:])
+
+
+def is_palindrome_recursive(s):
+    """
+    Перевіряє рекурсивно, чи є рядок паліндромом.
+
+    :param s: Вхідний рядок
+    :return: True, якщо рядок є паліндромом, інакше False
+    """
+    # Видаляємо неалфавітні символи та переводимо до нижнього регістру
+    s = ''.join(c.lower() for c in s if c.isalnum())
+
+    if len(s) <= 1:
+        return True
+    if s[0] != s[-1]:
+        return False
+    return is_palindrome_recursive(s[1:-1])
+
+
+# Приклад використання функцій:
+if __name__ == "__main__":
+    try:
+        print("Факторіал 5:", factorial_recursive(5))
+    except ValueError as e:
+        print(e)
+
+    try:
+        print("7-ме число Фібоначчі:", fibonacci_recursive(7))
+    except ValueError as e:
+        print(e)
+
+    print("Сума списку [1, 2, 3, 4, 5]:", sum_list_recursive([1, 2, 3, 4, 5]))
+
+    print("Чи є 'Madam' паліндромом:", is_palindrome_recursive("Madam"))
+    print("Чи є 'race a car' паліндромом:", is_palindrome_recursive("race a car"))
