@@ -1,0 +1,136 @@
+import datetime
+from collections import Counter
+import string
+
+# ======= Завдання 1: Модуль обробки дат =======
+class UkrainianCalendar:
+    def __init__(self):
+        self.holidays = [
+            (1, 1),   # Новий Рік
+            (1, 7),   # Різдво
+            (3, 8),   # Міжнародний жіночий день
+            (4, 27),  # Пасха 2025 (можна змінити)
+            (5, 1),   # День праці
+            (5, 9),   # День перемоги
+            (6, 28),  # День Конституції
+            (8, 24),  # День Незалежності
+            (10, 14), # День захисника України
+        ]
+
+    def get_holiday_list(self):
+        return [f"{day:02d}.{month:02d}" for month, day in self.holidays]
+
+    def is_working_day(self, date):
+        if date.weekday() >= 5:  # субота або неділя
+            return False
+        for month, day in self.holidays:
+            if date.month == month and date.day == day:
+                return False
+        return True
+
+# ======= Завдання 2: Калькулятор =======
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+    def subtract(self, a, b):
+        return a - b
+
+    def multiply(self, a, b):
+        return a * b
+
+    def divide(self, a, b):
+        if b == 0:
+            return "Помилка: ділення на нуль!"
+        return a / b
+
+# ======= Завдання 3: Аналіз тексту =======
+class TextStats:
+    def __init__(self, text):
+        self.text = text
+
+    def count_words(self):
+        return len(self.text.split())
+
+    def most_common_letter(self):
+        letters = [
+            char.lower() for char in self.text
+            if char.lower() in string.ascii_lowercase or char.lower() in 'абвгґдеєжзийіклмнопрстуфхцчшщьюя'
+        ]
+        if not letters:
+            return None
+        counter = Counter(letters)
+        return counter.most_common(1)[0]
+
+# ======= Основні функції для демонстрації =======
+def run_calendar_demo():
+    print("\n--- Демонстрація календаря ---")
+    cal = UkrainianCalendar()
+    print("Свята України:", cal.get_holiday_list())
+
+    date_str = input("Введіть дату у форматі YYYY-MM-DD: ")
+    try:
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        print("Це робочий день?" , cal.is_working_day(date))
+    except ValueError:
+        print("Невірний формат дати!")
+
+def run_calculator():
+    print("\n--- Калькулятор ---")
+    try:
+        a = float(input("Введіть перше число: "))
+        b = float(input("Введіть друге число: "))
+    except ValueError:
+        print("Помилка: введіть числа!")
+        return
+
+    print("Операції: +, -, *, /")
+    op = input("Оберіть операцію: ")
+
+    calc = Calculator()
+    if op == '+':
+        print("Результат:", calc.add(a, b))
+    elif op == '-':
+        print("Результат:", calc.subtract(a, b))
+    elif op == '*':
+        print("Результат:", calc.multiply(a, b))
+    elif op == '/':
+        print("Результат:", calc.divide(a, b))
+    else:
+        print("Невідома операція!")
+
+def run_text_analysis():
+    print("\n--- Аналіз тексту ---")
+    text = input("Введіть текст для аналізу: ")
+    stats = TextStats(text)
+    print("Кількість слів:", stats.count_words())
+    common = stats.most_common_letter()
+    if common:
+        print(f"Найчастіша літера: '{common[0]}' ({common[1]} разів)")
+    else:
+        print("Букв не знайдено.")
+
+# ======= Головне меню =======
+def main():
+    while True:
+        print("\n=== Головне меню ===")
+        print("1. Календар (свята та робочі дні)")
+        print("2. Калькулятор")
+        print("3. Аналіз тексту")
+        print("0. Вихід")
+        choice = input("Оберіть опцію: ")
+
+        if choice == '1':
+            run_calendar_demo()
+        elif choice == '2':
+            run_calculator()
+        elif choice == '3':
+            run_text_analysis()
+        elif choice == '0':
+            print("До побачення!")
+            break
+        else:
+            print("Невірний вибір!")
+
+if __name__ == "__main__":
+    main()
