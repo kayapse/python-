@@ -1,0 +1,84 @@
+import json
+
+# Клас для фільму
+class Film:
+    def __init__(self, title, genre, year, rating):
+        self.title = title
+        self.genre = genre
+        self.year = year
+        self.rating = rating
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "genre": self.genre,
+            "year": self.year,
+            "rating": self.rating
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return Film(data['title'], data['genre'], data['year'], data['rating'])
+
+
+# Клас для каталогу фільмів
+class Catalog:
+    def __init__(self):
+        self.films = []
+
+    def add_film(self, film):
+        self.films.append(film)
+
+    def save_to_file(self, filename):
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump([film.to_dict() for film in self.films], f, ensure_ascii=False, indent=4)
+
+    def load_from_file(self, filename):
+        try:
+            with open(filename, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                self.films = [Film.from_dict(item) for item in data]
+        except FileNotFoundError:
+            self.films = []
+
+    def filter_by_genre(self, genre):
+        return [film for film in self.films if film.genre.lower() == genre.lower()]
+
+    def sort_by_year(self):
+        return sorted(self.films, key=lambda f: f.year)
+
+    def sort_by_rating(self):
+        return sorted(self.films, key=lambda f: f.rating, reverse=True)
+
+
+# Функція для виводу фільмів у консоль
+def print_films(films):
+    for film in films:
+        print(f"{film.title} | {film.genre} | {film.year} | {film.rating}")
+
+
+# Головна логіка програми
+def main():
+    catalog = Catalog()
+    catalog.load_from_file("films.json")
+
+    # Додаємо приклади фільмів (лише якщо каталог порожній)
+    if not catalog.films:
+        catalog.add_film(Film("Тіні забутих предків", "Драма", 1965, 9.2))
+        catalog.add_film(Film("Захар Беркут", "Історичний", 2019, 7.3))
+        catalog.add_film(Film("Плем'я", "Драма", 2014, 8.0))
+        catalog.add_film(Film("Кіборги", "Військовий", 2017, 8.4))
+        catalog.save_to_file("films.json")
+
+    print("Фільми за рейтингом:")
+    print_films(catalog.sort_by_rating())
+
+    print("\nФільми за роком:")
+    print_films(catalog.sort_by_year())
+
+    print("\nФільми жанру 'Драма':")
+    print_films(catalog.filter_by_genre("Драма"))
+
+
+if __name__ == "__main__":
+    main()
