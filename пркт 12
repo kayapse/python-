@@ -1,0 +1,37 @@
+# Завдання 1: Швидкий пошук
+cities_list = ["Київ", "Одеса", "Львів", "Харків", "Житомир"]
+cities_set = set(cities_list)
+
+for city in ["Одеса", "Полтава"]:
+    if city in cities_set:
+        print(f"{city} є в списку.")
+    else:
+        print(f"{city} немає в списку.")
+
+# Завдання 2: Пошук за словником
+students = {"Іван": 80, "Марія": 95, "Олег": 78, "Анна": 85}
+name = input("\nВведіть ім'я студента для пошуку оцінки: ").strip()
+
+if name in students:
+    print(f"Оцінка студента {name}: {students[name]}")
+else:
+    print("Студента не знайдено.")
+
+# Завдання 3: Оптимізація повторів
+import random
+numbers = [random.randint(1, 100) for _ in range(1000)]
+
+counter = {}
+
+for num in numbers:
+    if num in counter:
+        counter[num] += 1
+    else:
+        counter[num] = 1
+
+max_count = max(counter.values())
+most_common = [num for num, count in counter.items() if count == max_count]
+
+print("\nЧисло(а), що повторюється найчастіше:")
+for num in most_common:
+    print(f"Число: {num}, Кількість повторень: {max_count}")
