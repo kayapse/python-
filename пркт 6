@@ -1,0 +1,66 @@
+def check_access():
+    # Перевірка віку користувача
+    age = input("Введіть ваш вік: ")
+    if not age.isdigit() or int(age) < 18:
+        print("Доступ заборонено!")
+        return
+    print("Доступ дозволено!")
+
+def check_stock():
+    stock = 20  # Кількість товару на складі
+    quantity = input("Введіть кількість товару: ")
+    if not quantity.isdigit() or int(quantity) <= 0:
+        print("Помилка: некоректна кількість!")
+        return
+    if int(quantity) > stock:
+        print("На складі недостатньо товару!")
+        return
+    print("Ваше замовлення прийнято!")
+
+def check_password():
+    # Перевірка складності пароля
+    password = input("Введіть пароль: ")
+    if len(password) < 8:
+        print("Пароль надто короткий!")
+        return
+    if password in ["password", "12345678"]:
+        print("Пароль занадто простий!")
+        return
+    print("Вхід дозволено!")
+
+def check_temperature():
+    temp = input("Введіть температуру приміщення: ")
+    # Перевірка, чи введено число з крапкою або без
+    if not temp.replace('.', '', 1).isdigit():
+        print("Некоректне значення температури!")
+        return
+    temp = float(temp)
+    if temp < 16:
+        print("Температура занизька! Увімкніть обігрівач.")
+        return
+    if temp > 28:
+        print("Температура зависока! Увімкніть кондиціонер.")
+        return
+    print("Температура комфортна.")
+
+def check_recharge():
+    # Перевірка суми поповнення рахунку
+    amount = input("Введіть суму поповнення: ")
+    if not amount.isdigit():
+        print("Некоректне значення суми!")
+        return
+    amount = int(amount)
+    if amount < 10:
+        print("Мінімальна сума поповнення – 10 грн!")
+        return
+    if amount > 3000:
+        print("Сума поповнення занадто велика!")
+        return
+    print(f"Поповнення на суму {amount} грн виконано успішно!")
+
+# Виконання всіх функцій для перевірки
+check_access()
+check_stock()
+check_password()
+check_temperature()
+check_recharge()
