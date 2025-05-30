@@ -1,0 +1,98 @@
+import random
+
+def task1():
+    deposit = float(input("Початкова сума вкладу: "))
+    rate = float(input("Процентна ставка (річна, %): "))
+    target = float(input("Бажана сума: "))
+    years = 0
+    while deposit < target:
+        deposit += deposit * (rate / 100)
+        years += 1
+        print(f"{years}-й рік: {deposit:.2f} грн")
+    print(f"Потрібно років: {years}\n")
+
+def task2():
+    secret = random.randint(1, 100)
+    for attempt in range(1, 8):
+        guess = int(input(f"Спроба {attempt}: Введіть число від 1 до 100: "))
+        if guess == secret:
+            print(f"Вгадано з {attempt} спроби! Це число {secret}.\n")
+            break
+        elif guess < secret:
+            print("Загадане число більше.")
+        else:
+            print("Загадане число менше.")
+    else:
+        print(f"Спроби закінчились. Загадане число було: {secret}\n")
+
+def task3():
+    start = int(input("Введіть нижню межу діапазону: "))
+    end = int(input("Введіть верхню межу діапазону: "))
+    found = False
+    print("Прості числа:")
+    for num in range(start, end + 1):
+        if num > 1:
+            for i in range(2, int(num ** 0.5) + 1):
+                if num % i == 0:
+                    break
+            else:
+                print(num, end=' ')
+                found = True
+    if not found:
+        print("Простих чисел у цьому діапазоні немає.")
+    print("\n")
+
+def task4():
+    while True:
+        try:
+            n = int(input("Введіть ціле невід’ємне число: "))
+            if n < 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Помилка! Спробуйте ще раз.")
+    result = 1
+    print(f"{n}! = ", end='')
+    for i in range(1, n + 1):
+        result *= i
+        print(i, end='*' if i < n else f" = {result}\n")
+    print()
+
+def task5():
+    population = 10
+    growth = float(input("Введіть відсоток росту за годину (наприклад, 20): "))
+    limit = int(input("Введіть максимальну кількість бактерій: "))
+    hours = 0
+    while population < limit:
+        print(f"{hours}-та година: {int(population)} бактерій")
+        population += population * (growth / 100)
+        hours += 1
+    print(f"{hours}-та година: {int(population)} бактерій — досягнуто межі.")
+    print(f"Загалом потрібно годин: {hours}\n")
+
+# Головне меню
+while True:
+    print("=== Меню практичної роботи No7 ===")
+    print("1. Банківський депозит")
+    print("2. Гра вгадай число")
+    print("3. Прості числа у діапазоні")
+    print("4. Факторіал з перевіркою")
+    print("5. Ріст популяції бактерій")
+    print("0. Вийти")
+    choice = input("Оберіть завдання (0-5): ")
+    print()
+    if choice == "1":
+        task1()
+    elif choice == "2":
+        task2()
+    elif choice == "3":
+        task3()
+    elif choice == "4":
+        task4()
+    elif choice == "5":
+        task5()
+    elif choice == "0":
+        print("Роботу завершено.")
+        break
+    else:
+        print("Невірний вибір, спробуйте ще раз.\n")
