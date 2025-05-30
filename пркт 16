@@ -1,0 +1,176 @@
+1
+from abc import ABC, abstractmethod
+import datetime
+
+# === Task 1: SRP — Book Management ===
+
+class Book:
+def __init__(self, title, author):
+self.title = title
+self.author = author
+
+class BookDatabase:
+def __init__(self):
+self.books = []
+
+def save_book(self, book: Book):
+self.books.append(book)
+print(f"Saved book: {book.title} by {book.author}")
+
+class BookViewer:
+def display_book(self, book: Book):
+print(f"Book: {book.title} by {book.author}")
+
+class BookUpdater:
+def update_title(self, book: Book, new_title):
+print(f"Updating title from {book.title} to {new_title}")
+book.title = new_title
+
+# === Task 2: OCP — Payment Processing ===
+
+class PaymentMethod(ABC):
+@abstractmethod
+def pay(self, amount):
+pass
+
+class CreditCardPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via Credit Card.")
+
+class PayPalPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via PayPal.")
+
+class CryptoPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via Cryptocurrency.")
+
+def process_payment(payment_method: PaymentMethod, amount):
+payment_method.pay(amount)
+
+# === Task 3: ISP & DIP — Notifications ===
+
+class Notifier(ABC):
+@abstractmethod
+def send(self, message):
+pass
+
+class EmailNotifier(Notifier):
+def send(self, message):
+print(f"[EMAIL] {message}")
+
+class SMSNotifier(Notifier):
+def send(self, message):
+print(f"[SMS] {message}")
+
+class PushNotifier(Notifier):
+def send(self, message):
+print(f"[PUSH] {message}")
+
+class EventNotifier:
+def __init__(self, notifier: Notifier):
+self.notifier = notifier
+
+def notify(self, message):
+self.notifier.send(message)
+
+# === Main usage ===
+
+# Task 1: SRP usage
+book1 = Book("The Silent Planet", "C.S. Lewis")
+db = BookDatabase()
+viewer = BookViewer()
+updater = BookUpdater()
+
+db.save_book(book1)
+viewer.display_book(book1)
+updater.update_title(book1, "Out of the Silent Planet")
+viewer.display_book(book1)
+
+print("\n" + "="*40 + "\n")
+
+# Task 2: OCP usage
+process_payment(CreditCardPayment(), 150)
+
+process_payment(PayPalPayment(), 200)
+process_payment(CryptoPayment(), 300)
+
+print("\n" + "="*40 + "\n")
+
+# Task 3: DIP & ISP usage
+email = EventNotifier(EmailNotifier())
+sms = EventNotifier(SMSNotifier())
+push = EventNotifier(PushNotifier())
+
+email.notify("New book available!")
+sms.notify("Your payment was successful.")
+push.notify("Reminder: return book before deadline.")
+
+2
+from abc import ABC, abstractmethod
+
+# === Базовий інтерфейс (SOLID: ISP, DIP) ===
+class PaymentMethod(ABC):
+@abstractmethod
+def pay(self, amount):
+pass
+
+# === Реалізації (SOLID: OCP) ===
+class CreditCardPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via Credit Card.")
+
+class PayPalPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via PayPal.")
+
+class CryptoPayment(PaymentMethod):
+def pay(self, amount):
+print(f"Payment of {amount} UAH via Cryptocurrency.")
+
+# === Функція, яка не змінюється (SOLID: DIP) ===
+def process_payment(payment_method: PaymentMethod, amount):
+payment_method.pay(amount)
+
+# === Приклад використання ===
+process_payment(CreditCardPayment(), 150)
+process_payment(PayPalPayment(), 200)
+process_payment(CryptoPayment(), 300)
+
+3
+from abc import ABC, abstractmethod
+
+class Notifier(ABC):
+@abstractmethod
+def send(self, message):
+pass
+
+# Реалізації сповіщень
+class EmailNotifier(Notifier):
+def send(self, message):
+print(f"[Email] Повідомлення: {message}")
+
+class SMSNotifier(Notifier):
+def send(self, message):
+print(f"[SMS] Повідомлення: {message}")
+
+class PushNotifier(Notifier):
+def send(self, message):
+print(f"[Push] Повідомлення: {message}")
+
+# Клас, що використовує абстракцію, а не конкретну реалізацію
+class AlertService:
+def __init__(self, notifier: Notifier):
+self.notifier = notifier
+
+def alert(self, message):
+self.notifier.send(message)
+
+alert1 = AlertService(EmailNotifier())
+alert1.alert("Знижки до -50%!")
+
+alert2 = AlertService(SMSNotifier())
+alert2.alert("Ваш код: 12345")
+
+alert3 = AlertService(PushNotifier())
+alert3.alert("Нова гра доступна для завантаження.")
