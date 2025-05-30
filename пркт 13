@@ -1,0 +1,59 @@
+def create_file():
+    filename = input("Введіть назву нового файлу (наприклад, text.txt): ")
+    with open(filename, "w", encoding="utf-8") as file:
+        print("Введіть текст (введіть порожній рядок для завершення):")
+        while True:
+            line = input()
+            if line == "":
+                break
+            file.write(line + "\n")
+
+    print("\nФайл збережено. Вміст файлу:")
+    with open(filename, "r", encoding="utf-8") as file:
+        print(file.read())
+    return filename
+
+
+def analyze_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            text = file.read()
+            lines = text.splitlines()
+            words = text.split()
+            characters = len(text)
+            print("\nАналіз файлу:")
+            print(f"Кількість рядків: {len(lines)}")
+            print(f"Кількість слів: {len(words)}")
+            print(f"Кількість символів: {characters}")
+    except FileNotFoundError:
+        print("Файл не знайдено.")
+
+
+def search_and_replace():
+    old_file = input("\nВведіть назву файлу для пошуку і заміни: ")
+    new_file = input("Введіть назву нового файлу для збереження: ")
+    search_word = input("Введіть слово або фразу для пошуку: ")
+    replace_word = input("Введіть слово або фразу для заміни: ")
+
+    try:
+        with open(old_file, "r", encoding="utf-8") as file:
+            content = file.read()
+            new_content = content.replace(search_word, replace_word)
+
+        with open(new_file, "w", encoding="utf-8") as file:
+            file.write(new_content)
+
+        print("Заміна виконана. Новий файл збережено.")
+    except FileNotFoundError:
+        print("⚠️ Файл не знайдено.")
+
+
+# --- Основна частина програми ---
+print("=== Простий текстовий редактор ===")
+file_created = create_file()
+
+print("\n=== Аналіз вмісту створеного файлу ===")
+analyze_file(file_created)
+
+print("\n=== Пошук і заміна ===")
+search_and_replace()
