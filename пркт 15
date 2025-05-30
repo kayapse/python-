@@ -1,0 +1,17 @@
+class Person:
+    def __init__(self, name, age, city):
+        self.name = name
+        self.age = age
+        self.city = city
+
+    def get_info(self):
+        """Виводить коротку інформацію про людину."""
+        print(f"{self.name}, {self.age} років, м. {self.city}")
+
+# Створення об'єктів
+person1 = Person("Леся", 25, "Львів")
+person2 = Person("Андрій", 19, "Київ")
+
+# Вивід інформації
+person1.get_info()
+person2.get_info()
