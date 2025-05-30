@@ -1,0 +1,51 @@
+products = {
+    "Сорочка": {"price": 1200, "category": "одяг"},
+    "Косметика": {"price": 600, "category": "краса"},
+    "Кава": {"price": 300, "category": "їжа"},
+    "Вишиванка": {"price": 2000, "category": "одяг"},
+    "Мило": {"price": 150, "category": "краса"},
+    "Мед": {"price": 250, "category": "їжа"},
+}
+
+def show_products_by_category(category):
+    print(f"\nТовари в категорії '{category}':")
+    filtered = {name: info for name, info in products.items() if info["category"] == category}
+    if not filtered:
+        print("Немає товарів у цій категорії.")
+    else:
+        for name, info in filtered.items():
+            print(f"- {name} — {info['price']} грн")
+
+def order_system():
+    print("Ласкаво просимо до магазину українських брендів!")
+
+    order = []
+    while True:
+        print("\nКатегорії: одяг, краса, їжа")
+        category = input("Введіть категорію для перегляду товарів (або 'вихід' для завершення): ").lower()
+        if category == "вихід":
+            break
+
+        show_products_by_category(category)
+
+        product_name = input("Введіть назву товару для замовлення (або 'назад' для повернення): ")
+        if product_name == "назад":
+            continue
+        elif product_name in products:
+            order.append(product_name)
+            print(f"Товар '{product_name}' додано до замовлення.")
+        else:
+            print("Такого товару немає.")
+
+    if not order:
+        print("\nВи не оформили жодного замовлення.")
+    else:
+        print("\nВаше замовлення:")
+        total = 0
+        for item in order:
+            price = products[item]["price"]
+            print(f"- {item}: {price} грн")
+            total += price
+        print(f"Загальна сума: {total} грн")
+
+order_system()
